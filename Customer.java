@@ -1,13 +1,27 @@
 class Customer {
-  private iPhone Phone;
+  private iPhone phone;
 
   public Customer(iPhone phone) {
-    this.Phone = phone;
+    this.phone = phone;
   }
+
+  public iPhone getPhone() {
+    return phone;
+  }
+
   public String getPhoneStorage() {
-    return Phone.getStorage();
+    return phone.getStorage();
   }
+
   public double getPhonePrice() {
-    return Phone.getPrice();
+    return phone.getPrice();
+  }
+
+  public String getPhoneModel() {
+    return phone.getModel();
+  }
+
+  public void setPhone(iPhone phone) {
+    this.phone = phone;
   }
 }

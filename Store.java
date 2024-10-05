@@ -5,7 +5,8 @@ class Store {
     this.buyer = buyer;
   }
 
-  public void attemptPurchase(iPhone phone) {
+  public void attemptPurchase(Customer customer) {
+    iPhone phone = customer.getPhone();
     buyer.purchase(phone);
   }
 }
