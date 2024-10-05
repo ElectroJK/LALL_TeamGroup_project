@@ -1,3 +1,4 @@
+
 class Person {
     private String name;
     private double budget;
@@ -6,11 +7,9 @@ class Person {
         this.name = name;
         this.budget = budget;
     }
-
     public String getName() {
         return name;
     }
-
     public double getBudget() {
         return budget;
     }
