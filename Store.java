@@ -26,7 +26,7 @@ class Store {
     }
   }
 
-  public void AttemptPurchase(Customer customer) {
+  public void attemptPurchase(Customer customer) {
     iPhone phone = customer.getPhone();
     buyer.purchase(phone);
     NotifyObservers("Phone " + phone.getModel() + " has been purchased.");
