@@ -13,6 +13,6 @@ class PurchaseCommand implements Command {
 
     @Override
     public void execute() {
-        store.AttemptPurchase(customer);
+        store.attemptPurchase(customer);
     }
 }
