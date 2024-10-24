@@ -1,6 +1,16 @@
+import java.util.Scanner;
+
 public class Main {
     public static void main(String[] args) {
-        Person person = new Person("Джэк", 600000);
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Enter your name: ");
+        String name = scanner.nextLine();
+
+        System.out.print("Enter your budget: ");
+        double budget = scanner.nextDouble();
+
+        Person person = new Person(name, budget);
         iPhoneFactory phoneFactory = new iPhone15Factory();
         iPhone phone = phoneFactory.createiPhone();
         iPhone clonedPhone = phone.clone();
@@ -13,11 +23,22 @@ public class Main {
         budgetCheckHandler.setNext(finalPurchaseHandler);
 
         StockManagementSystem stockSystem = new StockManagementSystem();
-        store.addObserver(stockSystem);
+        store.AddObserver(stockSystem);
+
+        PurchaseMediator mediator = new PurchaseMediator(store, stockSystem);
+        mediator.notify(store, "PurchaseAttempt");
+
+        CustomerCareTaker careTaker = new CustomerCareTaker();
+        careTaker.saveState(customer);
 
         Command purchaseCommand = new PurchaseCommand(store, customer);
         purchaseCommand.execute();
 
+        careTaker.restoreState(customer);
+        System.out.println("Restored state: " + customer.getPhone().getModel());
+
         budgetCheckHandler.handle(customer, clonedPhone);
+
+        scanner.close();
     }
 }

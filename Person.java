@@ -1,4 +1,3 @@
-
 class Person {
     private String name;
     private double budget;
