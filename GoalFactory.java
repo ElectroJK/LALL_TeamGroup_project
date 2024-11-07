@@ -1,4 +1,4 @@
-//Factory pattern, to create goals and accessible (-Meirzhan)
+//Factory that create goals -Meirzhan
 interface GoalFactory {
   Goal createGoal(String name, double amount);
 }

@@ -1,4 +1,4 @@
-//prototype pattern (-Meirzhan)
+//Prototype pattern for clonning -Meirzhan
 class Goal implements Cloneable {
   private String name;
   private double targetAmount;
@@ -47,7 +47,7 @@ class Goal implements Cloneable {
     }
   }
 
-  // Cloning (Prototype Pattern) (-Meirzhan)
+  // Cloning (Prototype Pattern) -Meirzhan
   @Override
   protected Goal clone() {
     try {
@@ -60,5 +60,16 @@ class Goal implements Cloneable {
   @Override
   public String toString() {
     return name + ": Saved = " + savedAmount + ", Target = " + targetAmount;
+  }
+
+  // Memento class saving -Meirzhan
+  public GoalMemento save() {
+    return new GoalMemento(name, targetAmount, savedAmount);
+  }
+
+  public void restore(GoalMemento memento) {
+    this.name = memento.getName();
+    this.targetAmount = memento.getTargetAmount();
+    this.savedAmount = memento.getSavedAmount();
   }
 }
