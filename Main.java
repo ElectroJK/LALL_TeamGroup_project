@@ -1,44 +1,58 @@
 import java.util.Scanner;
 
+//command pattern in main for user interactions -Kadyrulan
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-
         System.out.print("Enter your name: ");
         String name = scanner.nextLine();
+        SavingsTracker tracker = SavingsTracker.getInstance(name);
+        GoalFactory factory = new SavingsGoalFactory();
 
-        System.out.print("Enter your budget: ");
-        double budget = scanner.nextDouble();
+        BankAPI bankAPI = new BankAPIImpl();
+        GoalObserver bankAdapter = new BankAPIAdapter(bankAPI);
 
-        Person person = new Person(name, budget);
-        iPhoneFactory phoneFactory = new iPhone15Factory();
-        iPhone phone = phoneFactory.createiPhone();
-        iPhone clonedPhone = phone.clone();
-        Customer customer = new Customer(clonedPhone);
-        Buyer buyer = new iPhoneBuyer(person);
-        Store store = Store.getInstance(buyer);
+        tracker.addObserver(bankAdapter);
 
-        PurchaseHandler budgetCheckHandler = new BudgetCheckHandler(buyer);
-        PurchaseHandler finalPurchaseHandler = new FinalPurchaseHandler();
-        budgetCheckHandler.setNext(finalPurchaseHandler);
+        tracker.addObserver(new GoalNotifier());
 
-        StockManagementSystem stockSystem = new StockManagementSystem();
-        store.AddObserver(stockSystem);
+        while (true) {
+            System.out.println("\nMenu:");
+            System.out.println("1. Add Goal");
+            System.out.println("2. View Goals");
+            System.out.println("3. Delete Goal");
+            System.out.println("4. Exit");
+            System.out.print("Choose an option: ");
+            int choice = tracker.getValidIntInput(scanner);
 
-        PurchaseMediator mediator = new PurchaseMediator(store, stockSystem);
-        mediator.notify(store, "PurchaseAttempt");
-
-        CustomerCareTaker careTaker = new CustomerCareTaker();
-        careTaker.saveState(customer);
-
-        Command purchaseCommand = new PurchaseCommand(store, customer);
-        purchaseCommand.execute();
-
-        careTaker.restoreState(customer);
-        System.out.println("Restored state: " + customer.getPhone().getModel());
-
-        budgetCheckHandler.handle(customer, clonedPhone);
-
-        scanner.close();
+            switch (choice) {
+                case 1:
+                    System.out.print("Enter goal name or 0 to cancel: ");
+                    String goalName = scanner.nextLine();
+                    if (goalName.equals("0")) break;
+                    System.out.print("Enter target amount for " + goalName + ": ");
+                    double amount = tracker.getValidDoubleInput(scanner);
+                    tracker.addGoal(factory, goalName, amount);
+                    break;
+                case 2:
+                    tracker.viewGoals();
+                    System.out.print("Select goal to manage or 0 to cancel: ");
+                    int goalIndex = tracker.getValidIntInput(scanner);
+                    if (goalIndex == 0) break;
+                    tracker.manageGoal(goalIndex);
+                    break;
+                case 3:
+                    tracker.viewGoals();
+                    System.out.print("Select goal to delete or 0 to cancel: ");
+                    int deleteIndex = tracker.getValidIntInput(scanner);
+                    tracker.deleteGoal(deleteIndex);
+                    break;
+                case 4:
+                    System.out.println("Goodbye, " + tracker.getUserName() + "!");
+                    return;
+                default:
+                    System.out.println("Invalid choice.");
+            }
+        }
     }
 }
